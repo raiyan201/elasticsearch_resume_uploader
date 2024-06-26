@@ -1,0 +1,9 @@
+Instruction file
+
+for elastic search install  elasticsearch-7.17.0-windows-x86_64.zip
+then check localhost:9200
+json or not
+
+run elastic searh in bin dir like
+C:\Users\Arivani\Downloads\elasticsearch-7.17.0-windows-x86_64\elasticsearch-7.17.0\bin
+then run elasticsearch.bat ion this dir 
