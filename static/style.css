@@ -1,0 +1,150 @@
+.showfilebox .left{
+    display:flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.filetype{
+    background: rgb(0, 136, 255);
+    color: rgb(59, 44, 44);
+}
+
+.left h6{
+font-weight: 500;
+font-size: 15px;
+color:black;
+margin:0;
+}
+
+.right span{
+    background: rgb(0, 136, 255);
+    color: rgb(59, 44, 44);
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;	
+}
+
+
+/* #files-area{
+	width: 30%;
+	margin: 0 ;
+}
+
+.file-block{
+	border-radius: 10px;
+	background-color: rgba(144, 163, 203, 0.2);
+	margin: 5px;
+	color: initial;
+	display: inline-flex;
+
+	& > span.name{
+		
+		padding-right: 10px;
+		width: max-content;
+		display: inline-flex;
+	}
+}
+
+.file-delete{
+	display: flex;
+	width: 24px;
+	color: initial;
+	background-color: #6eb4ff00;
+	font-size: large;
+	justify-content: center;
+	margin-right: 3px;
+	cursor: pointer;
+	&:hover{
+		background-color: rgba(144, 163, 203, 0.2);
+		border-radius: 10px;
+	}
+	& > span{
+		transform: rotate(45deg);
+	}
+} */
+
+
+
+#files-area {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #f6f6f6;
+}
+
+.file-block {
+    border-radius: 5px;
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 5px 10px;
+    color: initial;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.file-block span.name {
+    flex: 1;
+    padding-right: 20px;
+    font-weight: 600;
+}
+
+.file-delete {
+    width: 24px;
+    height: 24px;
+    color: initial;
+    background-color: transparent;
+    font-size: large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-delete:hover {
+    background-color: rgba(144, 163, 203, 0.4);
+    border-radius: 50%;
+}
+
+.file-delete > span {
+    transform: rotate(45deg);
+    display: block;
+}
+
+
+
+/* loader */
+
+/* #loader {
+    border: 12px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 12px solid #444444;
+    width: 70px;
+    height: 70px;
+    animation: spin 1s linear infinite;
+}
+
+.center {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+} */
+
+/* loader */

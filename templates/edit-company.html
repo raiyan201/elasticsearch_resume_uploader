@@ -1,0 +1,58 @@
+{% extends 'layout/layout.html' %}
+{% block content %}
+{% load static %}
+
+ <!-- page content -->        
+<div class="text-center" style="text-align: center;">
+    <h1>Edit Company</h1>
+</div>
+  
+<div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">            
+            
+            <form name="myForm" action="/update-company/{{instance.id}}"  
+            method="POST" onsubmit="return validateForm()">
+
+              {% csrf_token %}
+              
+              <div class="form-group">
+                <center><label for="company">
+                    <B>Company:</B><span id="company_error" style="color: red"></span
+                ></label></center>
+                <input
+                  type="text"
+                  name="company"
+                  id="company"
+                  placeholder="Please Enter the Company"
+                  class="form-control"
+                  value="{{instance.company_name}}"
+                />
+              </div>
+
+              <center><button type="submit" class="btn btn-outline-primary mt-4" >
+                Update
+              </button></center>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script>
+    
+    function validateForm(){
+        let x=document.forms["myForm"]["company"].value;
+        if (x=="") {
+            document.getElementById("company_error").innerHTML="Required";  
+            return false;
+        }
+        return true;           
+      }
+    </script>
+
+<!-- /page content -->
+{% endblock %}

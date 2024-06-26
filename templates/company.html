@@ -1,0 +1,58 @@
+{% extends 'layout/layout.html' %}
+{% block content %}
+{% load static %}
+
+<!-- page content -->        
+  <div class="text-center" style="text-align: center;">
+    <h1>Company</h1>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <a href="{% url 'add-company' %}" class="btn btn-success">Add Company</a>
+  </div>
+
+<!-- /page content -->
+
+
+{% if company %}
+
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Company Name</th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Created By</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for companies in company %}
+      <tr>
+          <td>{{forloop.counter}}</td>
+          <td>{{companies.company_name}}</td>
+          <td>
+
+            <label class="switch" onclick="window.location.href='company-status/{{companies.id}}'">
+            <input type="checkbox" {% if companies.status == True %}checked{% endif %}>
+            <span class="slider round"></span>
+            </label>
+
+          </td>
+          <td>{{companies.created_at}}</td>
+          <td>{{companies.created_by}}</td>
+          <td>
+
+            <a href="/edit-company/{{companies.id}}" class="btn btn-info">Edit</a>
+            <a href="/delete-company/{{companies.id}}" class="btn btn-danger">Delete</a>
+          
+          </td>
+      </tr>      
+    {% endfor %}
+  
+  </tbody>
+</table>
+{% endif %}
+{% endblock %}

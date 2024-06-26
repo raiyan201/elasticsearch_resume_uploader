@@ -1,0 +1,41 @@
+{% extends 'layout/layout.html' %}
+{% block content %}
+{% load static %}
+
+<!-- page content -->
+<div class="text-center mb-4">
+    <h1>Add Roles</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form name="myForm" action="{% url 'add-roles' %}" method="POST" onsubmit="return validateForm()">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <center><label for="role"><B>Role:</B></label></center>
+                            <input type="text" name="role" id="role" placeholder="Please Enter the Role" class="form-control">
+                            <span id="role_error" class="text-danger"></span>
+                        </div>
+                        <center><button type="submit" class="btn btn-outline-primary mt-4">Submit</button></center>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        let roleValue = document.forms["myForm"]["role"].value;
+        if (roleValue.trim() === "") {
+            document.getElementById("role_error").innerHTML = "Required";
+            return false;
+        }
+        return true;
+    }
+</script>
+<!-- /page content -->
+{% endblock %}

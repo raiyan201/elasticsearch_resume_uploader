@@ -1,0 +1,56 @@
+{% extends 'layout/layout.html' %}
+{% block content %}
+{% load static %}
+
+ <!-- page content -->        
+  <div class="text-center" style="text-align: center;">
+    <h1>Location</h1>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <a href="{% url 'add-location' %}" class="btn btn-success">Add Location</a>
+  </div>
+
+<!-- /page content -->
+
+{% if location %}
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Location</th>
+      <th>Status</th>
+      <th>Created At</th>
+      <th>Created By</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+<tbody>
+  {% for locations in location %}
+  <tr>
+    <td>{{forloop.counter}}</td>
+    <td>{{locations.location_name}}</td>
+    <td>
+
+      <label class="switch" onclick="window.location.href='/location-status/{{locations.id}}'">
+      <input type="checkbox" {% if locations.status == True %}checked{% endif %}>
+      <span class="slider round"></span>
+      </label>
+
+    </td>
+
+    <td>{{locations.created_at}}</td>
+    <td>{{locations.created_by}}</td>
+    <td>
+    <a href="/edit-location/{{locations.id}}" class="btn btn-info">Edit</a>
+    <a href="/delete-location/{{locations.id}}" class="btn btn-danger">Delete</a>
+  </td>
+  </tr>
+
+ 
+{% endfor %}
+</tbody>
+</table>
+{% endif %}
+{% endblock %}

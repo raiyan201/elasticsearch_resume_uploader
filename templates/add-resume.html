@@ -1,0 +1,372 @@
+{% extends 'layout/layout.html' %} 
+{% block content %} 
+{% load static %}
+
+<!-- page content -->
+<body>
+  {% comment %} <body onload="hideLoader()" unload="hideSubmitBtn()"> {% endcomment %}
+
+<div class="text-center" style="text-align: center">
+  <h1> {% if edit_mode %}Edit {% else %}Add {% endif %}Resume</h1>
+</div>
+
+
+{% if messages %}
+<div class="messages">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" role="alert">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %} 
+
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+
+          <div id="loader" class="center"></div>
+          
+          <form
+            name="myForm"
+            action="{% if edit_mode %}{% url 'update-resume' instance.id %}{% else %}{% url 'uploads' %}{% endif %}"
+            method="POST"
+            onsubmit="return validateForm()"
+            enctype="multipart/form-data"
+            id="file-form"
+          >
+
+          {% csrf_token %}
+          
+          <div class="d-flex justify-content-end">
+              <a href="/resume" class="btn btn-outline-primary">
+                <i class="fa fa-arrow-left fa-lg" aria-hidden="true"></i> Back
+              </a>
+            </div>
+
+            <div class="form-group">
+              <label for="role"
+                >Role:<span id="role_error" style="color: red">*</span></label
+              >
+              
+              <select name="role" id="role" class="form-control mb-4" value="{% if edit_mode %}{{instance.role_name}}{% endif %}">
+                <option value="">Select Role</option>
+                {% for role in roles %} {% if role.status == True %}
+                <option value="{{role.role_name}}" {% if instance.role_name == role.role_name %}selected{% endif %}>{{role.role_name}}</option>
+                {% endif %} 
+                {% endfor %}
+              </select>
+
+              <label for="location"
+                >Location:<span id="location_error" style="color: red"
+                  >*</span
+                ></label>
+                
+              <select name="location" id="location" class="form-control mb-4" value="{% if edit_mode %}{{instance.location}}{% endif %}">
+                <option value="">Select Location</option>
+                {% for locations in location %} 
+                {% if locations.status == True %}
+                <option value="{{locations.location_name}}" {% if instance.location == locations.location_name %}selected{% endif %}>
+                  {{locations.location_name}}
+                </option>
+                {% endif %} 
+                {% endfor %}
+              </select>
+    
+              <label for="company"
+                >Company<span id="company_error" style="color: red"></span
+              ></label>
+              <select name="company" id="company" class="form-control mb-4" value="{% if edit_mode %}{{instance.company_name}}{% endif %}">
+                <option value="">Select Company</option>
+                {% for companies in company %} {% if companies.status == True %}
+                <option value="{{companies.company_name}}" {% if instance.company_name == companies.company_name %}selected{% endif %}>
+                  {{companies.company_name}}
+                </option>
+                {% endif %} 
+                {% endfor %}
+              </select>
+
+              
+      <span class="btn btn-primary fileinput-button btn-sm" style="width:100%";>
+      <span>Select Attachment</span>  
+      <input type="file" multiple name="uploadfiles[]" id="uploadfiles" accept=".doc,.docx,.pdf"/>
+      <span><i class="fa fa-cloud"></i></span>                
+      </span>
+      
+    <div id="progress-area"></div>
+    
+</div>
+
+      <span id="uploadfiles_error" style="color: red"></span>  
+
+          <p id="files-area">
+            <span id="filesList">
+              <span id="files-names"></span>
+            </span>
+          </p>
+ 
+        </div>
+
+        
+        <center>
+          <div class="btn2" >
+              <div class="page-loader">
+                <div class="spinner"></div>
+                <button class="btn btn-success" type="button" disabled >
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Loading...
+                </button> 
+            </div>
+        </div> 
+
+              {% comment %} <div class="txt">Loading....</div>
+              </div> {% endcomment %}
+            
+            <div class="btn1 btn-lg" style="display:none">
+              <button type="submit" class="btn1 btn-success mt-4 mb-4" >Submit</button>
+            </div>
+
+            </center>           
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+
+<script>
+
+  function validateForm(){
+
+      let x=document.forms["myForm"]["role"].value;
+      let y=document.forms["myForm"]["location"].value;
+      /*let z=document.forms["myForm"]["company"].value; */
+      /*let a=document.forms["myForm"]["filename"].value;*/
+      let b=document.forms["myForm"]["uploadfiles[]"].value;
+
+    if (x=="") {
+        document.getElementById("role_error").innerHTML=  "Required";
+        return false;
+    }
+
+    if (y=="") {
+      document.getElementById("location_error").innerHTML=  "Required";
+      return false;
+    }
+
+    if (b=="") {
+      document.getElementById("uploadfiles_error").innerHTML=  "Required";
+      return false;
+    }
+
+    return true;
+  }
+
+</script>
+
+
+{% comment %} code1 {% endcomment %}
+
+{% comment %} <script>
+
+  $(document).ready(function() {
+    var dt = new DataTransfer();
+    $("#uploadfiles").on('change', function(e) {
+        var number_of_files = this.files.length;
+        var fileSize = 0;
+        var maxFileSize = 20097152;  
+        var allowedTypes = ['pdf', 'doc','docx'];
+
+        for (var i = 0; i < number_of_files; i++) {
+            fileSize += this.files[i].size;
+            var fileinput = document.getElementById('uploadfiles')
+            var fileName1 = fileinput.files[i].name;
+            var fileExtension = fileName1.split('.').pop().toLowerCase();
+
+            if (!allowedTypes.includes(fileExtension)) {
+            alert('Invalid file type. Please upload a DOCX, DOC, or PDF file.');
+            $('#uploadfiles').val('');
+            $('#filesList > #files-names').empty();
+            dt = new DataTransfer(); 
+            return;
+        }
+        }
+
+        if (fileSize > maxFileSize) {
+            alert('File size must not be more than 20 MB');
+            $('#uploadfiles').val('');
+            $('#filesList > #files-names').empty();
+            dt = new DataTransfer(); 
+            return;
+        }
+
+        for (var i = 0; i < number_of_files; i++) {
+
+          var fileinput = document.getElementById('uploadfiles')
+          var fileName1 = fileinput.files[i].name;
+          var fileExtension = fileName1.split('.').pop().toUpperCase();    
+    
+          let fileBloc = $('<span/>', {class: 'file-block'});
+          let fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+          fileBloc.append(fileName,fileExtension,'<span class="file-delete"><span>+</span></span>');
+
+          $("#filesList > #files-names").append(fileBloc);
+          
+          dt.items.add(this.files[i]);
+          }
+          
+        this.files = dt.files;
+
+        $('span.file-delete').click(function() {
+            let name = $(this).prev('.name').text();
+            $(this).parent().remove();
+
+            for (let i = 0; i < dt.items.length; i++) {
+                if (name === dt.items[i].getAsFile().name) {
+                    dt.items.remove(i);
+                    break;
+                }
+            }      
+            document.getElementById('uploadfiles').files = dt.files;
+        });
+    });
+});
+</script> {% endcomment %}
+
+{% comment %} code-1 {% endcomment %}
+{% comment %} code-2 {% endcomment %}
+
+
+<script>
+  $(document).ready(function() {
+    var dt = new DataTransfer();
+
+
+    $("#uploadfiles").on('change', function(e) {
+        var number_of_files = this.files.length;
+        var fileSize = 0;
+        var maxFileSize = 20097152;  
+        var allowedTypes = ['pdf', 'doc','docx'];
+
+        for (var i = 0; i < number_of_files; i++) 
+        {
+            fileSize += this.files[i].size;
+
+            var fileinput = document.getElementById('uploadfiles')
+            var fileName1 = fileinput.files[i].name;
+            var fileExtension = fileName1.split('.').pop().toLowerCase();
+            
+//alert(nu/mber_of_files)
+          if (fileSize > maxFileSize) 
+          {
+            alert('File size must not be more than 20 MB');
+            dt.items.remove(i);
+            number_of_files-=1;
+            document.getElementById('uploadfiles').files = dt.files;
+           
+          }
+          
+         // alert(number_of_files)
+            if (!allowedTypes.includes(fileExtension)) {
+            alert('Invalid file type. Please upload a DOCX, DOC, or PDF file.');
+            $('#uploadfiles').val('');
+            $('#filesList > #files-names').empty();
+            dt = new DataTransfer();         
+            return;
+          }
+        }
+
+        //alert("hell")
+        for (var i = 0; i < number_of_files; i++) 
+        {
+
+            try{var fileinput = document.getElementById('uploadfiles')
+            var fileName1 = fileinput.files[i].name;
+            var fileExtension = fileName1.split('.').pop().toUpperCase();    
+      
+            let fileBloc = $('<span/>', {class: 'file-block'});
+            let fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+            fileBloc.append(fileName,fileExtension,'<span class="file-delete"><span>+</span></span>');
+
+            $("#filesList > #files-names").append(fileBloc);
+            //alert("LAst")
+            dt.items.add(this.files[i]);}
+            catch(error){
+              console.log(error)
+            }        
+          }
+
+        this.files = dt.files;
+
+        $('span.file-delete').click(function() {
+            let name = $(this).prev('.name').text();
+            $(this).parent().remove();
+
+            for (let i = 0; i < dt.items.length; i++) {
+                if (name === dt.items[i].getAsFile().name) {
+                    dt.items.remove(i);
+                    break;
+                }
+            }      
+            document.getElementById('uploadfiles').files = dt.files;
+        });
+    });
+});
+
+</script> 
+{% comment %} code-2 {% endcomment %}
+
+
+
+
+{% comment %} <script>   
+  function hideLoader(){
+    $('.page-loader').fadeOut('slow');
+    // $('.btn1').show();
+  }
+</script>
+
+
+<script>
+  function hideSubmitBtn()
+  {
+    $('.btn1').hide();
+  }
+</script> {% endcomment %}
+
+{% comment %} <script>
+
+  document.onreadystatechange = function(){
+    if (document.readyState!== "complete"){
+      document.querySelector("#loader").style.display="visible";
+      document.querySelector("body").style.visibility="none";      
+    }
+    else{
+      document.querySelector("#loader").style.display="none";
+      document.querySelector("body").style.visibility="visible";
+    }
+  }
+
+</script> {% endcomment %}
+
+
+<script>
+
+  document.onreadystatechange = function() {
+      if (document.readyState == "loading") {
+          document.getElementsByClassName("btn1")[0].style.display = "none";
+          document.getElementsByClassName("btn2")[0].style.display = "block";
+      } else if (document.readyState == "complete") {
+          document.getElementsByClassName("btn1")[0].style.display = "block";
+          document.getElementsByClassName("btn2")[0].style.display = "none";
+      }
+  }
+
+</script> 
+
+
+<!-- /page content -->
+{% endblock %} 

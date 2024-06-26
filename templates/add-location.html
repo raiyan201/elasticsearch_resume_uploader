@@ -1,0 +1,53 @@
+{% extends 'layout/layout.html' %} {% block content %} {% load static %}
+
+<!-- page content -->
+<div class="text-center" style="text-align: center">
+  <h1>Add Location</h1>
+</div>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <form
+            name="myForm"
+            action="{% url 'add-location' %}"
+            method="POST"
+            onsubmit="return validateForm()"
+          >
+            {% csrf_token %}
+            <div class="form-group">
+              <center><label for="location">
+                <B>Location:</B><span id="location_error" style="color: red"></span
+              ></label></center>
+              <input
+                type="text"
+                name="location"
+                id="location"
+                placeholder="Please Enter the Location"
+                class="form-control"
+              />
+            </div>
+            <center><button type="submit" class="btn btn-outline-primary mt-4" >
+              Submit
+            </button></center>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function validateForm() {
+    let x = document.forms["myForm"]["location"].value;
+    if (x == "") {
+      document.getElementById("location_error").innerHTML = "Required";
+      return false;
+    }
+    return true;
+  }
+</script>
+<!-- /page content -->
+{% endblock %}
